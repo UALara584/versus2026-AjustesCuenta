@@ -1,1 +1,141 @@
-/* You can add global styles to this file, and also import other style files */
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:wght@400;600&family=Inter:wght@400;500;600&display=swap');
+
+:root {
+  --vs-bg-base:         #0d0d0f;
+  --vs-bg-surface:      #16161a;
+  --vs-bg-elevated:     #1e1e24;
+  --vs-bg-input:        #111115;
+
+  --vs-accent-red:      #e63946;
+  --vs-accent-gold:     #f4c542;
+  --vs-accent-blue:     #4361ee;
+  --vs-accent-green:    #2ec4b6;
+  --vs-accent-purple:   #7b2d8b;
+
+  --vs-text-primary:    #f0f0f2;
+  --vs-text-secondary:  #9898a6;
+  --vs-text-muted:      #56565f;
+
+  --vs-border:          #2a2a32;
+  --vs-border-focus:    #4361ee;
+
+  --vs-life-full:       #2ec4b6;
+  --vs-life-mid:        #f4c542;
+  --vs-life-low:        #e63946;
+
+  --vs-transition:      150ms ease;
+  --vs-transition-slow: 300ms ease;
+
+  --vs-radius-sm:  4px;
+  --vs-radius-md:  8px;
+  --vs-radius-lg:  16px;
+
+  --vs-shadow-card:      0 2px 12px rgba(0, 0, 0, 0.5);
+  --vs-shadow-glow-red:  0 0 16px rgba(230, 57, 70, 0.35);
+  --vs-shadow-glow-blue: 0 0 16px rgba(67, 97, 238, 0.35);
+  --vs-shadow-glow-gold: 0 0 16px rgba(244, 197, 66, 0.35);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--vs-bg-base);
+  color: var(--vs-text-primary);
+  font-family: 'Inter', sans-serif;
+  font-size: 15px;
+  -webkit-font-smoothing: antialiased;
+}
+
+.vs-display {
+  font-family: 'Bebas Neue', sans-serif;
+  letter-spacing: 0.04em;
+}
+
+.vs-mono {
+  font-family: 'IBM Plex Mono', monospace;
+}
+
+.vs-container {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+// Animations
+@keyframes vs-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes vs-correct {
+  0%,
+  100% {
+    border-color: var(--vs-border);
+  }
+  40% {
+    border-color: var(--vs-accent-green);
+    box-shadow: 0 0 20px rgba(46, 196, 182, 0.4);
+  }
+}
+
+@keyframes vs-wrong {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  20% {
+    transform: translateX(-8px);
+  }
+  60% {
+    transform: translateX(8px);
+  }
+}
+
+@keyframes vs-hit {
+  0% {
+    background: var(--vs-bg-surface);
+  }
+  30% {
+    background: rgba(230, 57, 70, 0.15);
+  }
+  100% {
+    background: var(--vs-bg-surface);
+  }
+}
+
+@keyframes vs-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(230, 57, 70, 0.6);
+  }
+  50% {
+    box-shadow: 0 0 0 6px rgba(230, 57, 70, 0);
+  }
+}
+
+.animate-in {
+  animation: vs-fade-in 250ms ease forwards;
+}
+
+.animate-correct {
+  animation: vs-correct 600ms ease;
+}
+
+.animate-wrong {
+  animation: vs-wrong 350ms ease;
+}
+
+.animate-hit {
+  animation: vs-hit 600ms ease;
+}

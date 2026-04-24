@@ -1,0 +1,21 @@
+:host {
+  display: block;
+}
+
+.vs-card {
+  background: var(--vs-bg-surface);
+  border: 1px solid var(--vs-border);
+  border-radius: var(--vs-radius-md);
+  padding: 20px;
+  box-shadow: var(--vs-shadow-card);
+
+  &--interactive {
+    cursor: pointer;
+    transition: border-color var(--vs-transition), transform var(--vs-transition);
+
+    &:hover {
+      border-color: var(--vs-border-focus);
+      transform: translateY(-2px);
+    }
+  }
+}
