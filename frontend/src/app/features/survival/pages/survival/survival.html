@@ -1,0 +1,92 @@
+<div class="vs-survival"
+     [class.is-correct]="phase() === 'correct'"
+     [class.is-wrong]="phase() === 'wrong'">
+
+  <!-- HUD -->
+  <div class="vs-hud">
+    <div class="vs-hud__left">
+      <span class="vs-pill vs-pill--err">
+        <span class="vs-pill__dot"></span>SUPERVIVENCIA
+      </span>
+      <div class="vs-lifebar">
+        @for (i of [0,1,2]; track i) {
+          <span [class]="heartClass(i)"></span>
+        }
+      </div>
+    </div>
+
+    <div class="vs-hud__center">
+      <div class="vs-streak" [attr.data-active]="streak() > 0">
+        <span class="vs-streak__x">×</span>
+        <span class="vs-streak__num vs-mono">{{ streak() }}</span>
+        <span class="vs-streak__label">RACHA</span>
+      </div>
+    </div>
+
+    <div class="vs-hud__right">
+      <div class="vs-hud__score">
+        <div class="vs-stat-label">PUNTOS</div>
+        <div class="vs-stat-num">{{ fmt(score()) }}</div>
+      </div>
+      <a routerLink="/play/select" class="btn btn--ghost btn--sm">ABANDONAR</a>
+    </div>
+  </div>
+
+  @if (errorMessage()) {
+    <div class="vs-error">{{ errorMessage() }}</div>
+  }
+
+  @if (question(); as q) {
+    <!-- Pregunta -->
+    <div class="vs-survival__question">
+      <div class="vs-q-label">CATEGORÍA · {{ q.category | uppercase }}</div>
+      <h2 class="vs-q-text vs-display">{{ q.text }}</h2>
+    </div>
+
+    <!-- Arena -->
+    <div class="vs-survival__arena vs-binary-arena">
+      @for (opt of q.options; track opt.id) {
+        <button
+          type="button"
+          [class]="optionClass(opt.id)"
+          [disabled]="phase() !== 'idle'"
+          (click)="pick(opt.id)">
+          <span class="vs-bopt__text">{{ opt.text }}</span>
+        </button>
+      }
+    </div>
+  } @else {
+    <div class="vs-loading">Cargando pregunta…</div>
+  }
+
+  <!-- Feedback overlay -->
+  @if (feedback(); as fb) {
+    <div class="vs-feedback" [class.is-correct]="fb.isCorrect" [class.is-wrong]="!fb.isCorrect">
+      @if (fb.isCorrect) {
+        <div class="vs-feedback__title vs-display">¡ACIERTO!</div>
+        <div class="vs-feedback__delta vs-mono">+{{ fmt(fb.delta) }}</div>
+        <div class="vs-feedback__sub">RACHA × {{ streak() }}</div>
+        @if (lives() > 0) {
+          <button class="btn btn--primary btn--lg" (click)="next()">SIGUIENTE →</button>
+        }
+      } @else {
+        <div class="vs-feedback__title vs-display vs-glitch">FALLO</div>
+        <div class="vs-feedback__delta">— 1 VIDA</div>
+        <div class="vs-feedback__sub">Racha rota</div>
+        @if (lives() > 0) {
+          <button class="btn btn--danger btn--lg" (click)="next()">CONTINUAR</button>
+        }
+      }
+    </div>
+  }
+
+  <!-- Burst de partículas en racha alta -->
+  @if (showBurst()) {
+    <div class="vs-burst">
+      @for (i of burstItems; track i) {
+        <span class="vs-burst__shard" [style.--angle]="i * 30 + 'deg'"></span>
+      }
+    </div>
+  }
+
+</div>

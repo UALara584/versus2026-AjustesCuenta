@@ -1,0 +1,14 @@
+:host {
+  display: inline-block;
+}
+
+.vs-badge {
+  display: inline-block;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  padding: 3px 10px;
+  border-radius: var(--vs-radius-sm);
+  border: 1px solid currentColor;
+  text-transform: uppercase;
+}

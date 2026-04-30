@@ -1,0 +1,41 @@
+:host {
+  display: block;
+}
+
+.vs-input {
+  background: var(--vs-bg-input);
+  border: 1px solid var(--vs-border);
+  border-radius: var(--vs-radius-sm);
+  color: var(--vs-text-primary);
+  font-family: 'Inter', sans-serif;
+  font-size: 15px;
+  padding: 10px 14px;
+  width: 100%;
+  outline: none;
+  transition: border-color var(--vs-transition);
+
+  &::placeholder {
+    color: var(--vs-text-muted);
+  }
+
+  &:focus {
+    border-color: var(--vs-border-focus);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  &--numeric {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 24px;
+    text-align: center;
+    letter-spacing: 0.08em;
+  }
+}
+
+// Applied to host by Angular when used with reactive forms
+:host(.ng-invalid.ng-touched) .vs-input {
+  border-color: var(--vs-accent-red);
+}

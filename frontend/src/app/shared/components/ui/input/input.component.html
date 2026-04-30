@@ -1,0 +1,10 @@
+<input
+  class="vs-input"
+  [class.vs-input--numeric]="numeric()"
+  [type]="numeric() ? 'number' : inputType()"
+  [placeholder]="placeholder()"
+  [disabled]="isDisabled()"
+  [value]="value()"
+  (input)="onInput($event)"
+  (blur)="onBlur()"
+/>

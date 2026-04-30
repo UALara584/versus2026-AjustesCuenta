@@ -1,0 +1,59 @@
+<div class="vs-profile-page">
+  <app-topbar active="profile" />
+
+  <div class="vs-profile">
+
+    <!-- Cabecera del perfil -->
+    <div class="vs-profile__head vs-card">
+      <div class="vs-avatar" style="width: 104px; height: 104px; font-size: 38px">{{ initials() }}</div>
+      <div style="flex: 1">
+        <div class="vs-display" style="font-size: 42px; line-height: 1">{{ username() }}</div>
+        <div style="color: var(--vs-text-secondary); margin-top: 6px; font-size: 13px">
+          Se unió en {{ joined() }} · <strong>{{ totalGames() }}</strong> partidas ·
+          <strong style="color: var(--vs-accent-gold)">mejor racha {{ bestStreakOverall() }}</strong>
+        </div>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 8px">
+        <button class="btn btn--ghost btn--sm">EDITAR PERFIL</button>
+      </div>
+    </div>
+
+    <!-- Columnas -->
+    <div class="vs-profile__cols">
+
+      <!-- Columna izquierda -->
+      <div style="flex: 1; display: flex; flex-direction: column; gap: 24px">
+        <div>
+          <div class="vs-section-title">Estadísticas por modo</div>
+          <div class="vs-card" style="padding: 0">
+            @if (modeStats().length === 0) {
+              <div style="padding: 1.25rem; color: var(--vs-text-muted); text-align: center">
+                Aún no has jugado ninguna partida.
+              </div>
+            } @else {
+              <table class="vs-table">
+                <thead>
+                  <tr>
+                    <th>Modo</th><th>Partidas</th><th>Victorias</th><th>% Acierto</th><th>Mejor racha</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @for (s of modeStats(); track s.mode) {
+                    <tr>
+                      <td style="font-weight: 600">{{ s.mode }}</td>
+                      <td class="vs-mono">{{ s.games }}</td>
+                      <td class="vs-mono">{{ s.wins }}</td>
+                      <td class="vs-mono" style="color: var(--vs-accent-green)">{{ s.acc }}</td>
+                      <td class="vs-mono" style="color: var(--vs-accent-gold)">{{ s.best }}</td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            }
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
