@@ -1,5 +1,6 @@
 # Versus — Documentación
 
+
 **Versus** es un juego de preguntas multijugador con 5 modos de juego: Survival, Precision, Binary Duel, Precision Duel y Sabotage. Las preguntas se obtienen en tiempo real mediante scrapers propios.
 
 ## Servicios
