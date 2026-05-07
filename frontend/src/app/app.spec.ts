@@ -1,13 +1,24 @@
 import { TestBed } from '@angular/core/testing';
+import { signal } from '@angular/core';
 import { By } from '@angular/platform-browser';
 import { provideRouter, RouterOutlet } from '@angular/router';
 import { App } from './app';
+import { AchievementToastService } from './core/services/achievement-toast.service';
 
 describe('App', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [App],
-      providers: [provideRouter([])],
+      providers: [
+        provideRouter([]),
+        {
+          provide: AchievementToastService,
+          useValue: {
+            items: signal([]),
+            dismiss: vi.fn(),
+          },
+        },
+      ],
     }).compileComponents();
   });
 

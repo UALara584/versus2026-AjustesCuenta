@@ -29,6 +29,11 @@
       } @else {
         {{ initials() }}
       }
+      @if (latestAchievement(); as achievement) {
+        <span class="vs-avatar__achievement" [title]="achievement.name">
+          {{ achievementLabel(achievement) }}
+        </span>
+      }
     </div>
   </a>
 </div>

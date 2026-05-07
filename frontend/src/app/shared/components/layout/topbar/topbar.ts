@@ -1,8 +1,10 @@
 import { Component, OnInit, computed, inject, input, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { AuthService } from '../../../../core/services/auth.service';
+import { AchievementService } from '../../../../core/services/achievement.service';
 import { StatsService } from '../../../../core/services/stats.service';
 import { UserService } from '../../../../core/services/user.service';
+import { Achievement } from '../../../../core/models/achievement.models';
 import { PlayerStats } from '../../../../core/models/game.models';
 
 export type NavKey = 'home' | 'play' | 'ranking' | 'profile' | 'settings' | 'admin' | 'users' | 'spiders' | 'reports';
@@ -18,12 +20,14 @@ export class TopbarComponent implements OnInit {
   private readonly auth = inject(AuthService);
   private readonly users = inject(UserService);
   private readonly statsApi = inject(StatsService);
+  private readonly achievementsApi = inject(AchievementService);
 
   active = input<NavKey>('home');
   role = input<'player' | 'admin'>('player');
   user = input<TopbarUser | null>(null);
 
   private readonly stats = signal<PlayerStats[]>([]);
+  private readonly achievements = signal<Achievement[]>([]);
 
   items = computed<[NavKey, string][]>(() =>
     this.role() === 'admin'
@@ -60,6 +64,15 @@ export class TopbarComponent implements OnInit {
 
   initials = computed(() => this.displayUser().name.slice(0, 2).toUpperCase());
 
+  latestAchievement = computed(() => {
+    const unlocked = this.achievements().filter((achievement) => achievement.unlocked);
+    return unlocked.sort((a, b) => {
+      const at = a.unlockedAt ? new Date(a.unlockedAt).getTime() : 0;
+      const bt = b.unlockedAt ? new Date(b.unlockedAt).getTime() : 0;
+      return bt - at;
+    })[0] ?? null;
+  });
+
   ngOnInit(): void {
     if (!this.auth.isAuthenticated()) return;
     this.users.me().subscribe({
@@ -70,6 +83,33 @@ export class TopbarComponent implements OnInit {
       next: (list) => this.stats.set(list ?? []),
       error: () => this.stats.set([]),
     });
+    this.achievementsApi.list().subscribe({
+      next: (list) => this.achievements.set(list ?? []),
+      error: () => this.achievements.set([]),
+    });
+  }
+
+  achievementLabel(achievement: Achievement): string {
+    const labels: Record<string, string> = {
+      first: '1',
+      win: 'W',
+      streak5: '5',
+      streak10: '10',
+      streak20: '20',
+      precision: 'P',
+      sniper: 'P',
+      target: 'P',
+      survival: 'S',
+      shield: 'S',
+      perfect: 'S',
+      duel: 'D',
+      arena: 'D',
+      sabotage: 'SB',
+      friends: 'F',
+      invite: 'I',
+      collector: 'C',
+    };
+    return labels[achievement.iconKey] ?? 'OK';
   }
 
   private calculateXp(stats: PlayerStats[]): number {

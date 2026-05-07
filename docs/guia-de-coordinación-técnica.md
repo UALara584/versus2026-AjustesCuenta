@@ -18,14 +18,14 @@ Un juego de preguntas multijugador con **5 modos de juego**. Las preguntas se ex
  
 ## 🗺️ Módulos del sistema
  
-El proyecto se divide en **8 módulos**. Cada issue pertenece a uno.
+El proyecto se divide en **9 módulos**. Cada issue pertenece a uno.
  
 ```
 ┌─────────────────────────────────────────────────────────┐
 │                        VERSUS                           │
 │                                                         │
 │  [AUTH]  [USERS]  [QUESTIONS]  [GAME]  [MATCH]         │
-│  [STATS]  [SCRAPING]  [ADMIN]                          │
+│  [STATS]  [ACHIEVEMENTS]  [SCRAPING]  [ADMIN]          │
 └─────────────────────────────────────────────────────────┘
 ```
  
@@ -165,7 +165,7 @@ Respuesta: `204 No Content`. En frontend se exige doble confirmacion escribiendo
 - Topbar: muestra username/avatar reales y XP calculado desde `/api/stats/me` mientras no exista campo `xp` dedicado.
  
 ---
- 
+
 ## ❓ Módulo 3 — QUESTIONS
 > Issues: #41, #42, #43, #44, #52
  
@@ -265,7 +265,8 @@ Frontend                          Backend
   "streak": 4,
   "scoreDelta": 150,
   "nextQuestion": { ... },
-  "gameOver": false
+  "gameOver": false,
+  "achievementsUnlocked": []
 }
 ```
  
@@ -294,7 +295,8 @@ Frontend                          Backend
   "lifeDelta": 5,
   "livesRemaining": 105,
   "nextQuestion": { ... },
-  "gameOver": false
+  "gameOver": false,
+  "achievementsUnlocked": []
 }
 ```
  
@@ -403,8 +405,50 @@ GET /api/stats/me?mode=SURVIVAL
 > `avgDeviation` solo aplica a modos numéricos (PRECISION, PRECISION_DUEL).
  
 ---
+
+## Modulo 7 - ACHIEVEMENTS
+> Sistema de logros y emblemas visibles en perfil/topbar.
+
+Los logros se evaluan al terminar una partida singleplayer desde `GameService`. El catalogo inicial se siembra en arranque y cada logro solo puede desbloquearse una vez por usuario.
+
+### Endpoints
+
+| Metodo | Ruta | Descripcion |
+|--------|------|-------------|
+| `GET` | `/api/achievements` | Catalogo completo con estado para el usuario autenticado |
+
+### Contrato de logro
+
+```json
+{
+  "id": "uuid",
+  "key": "first_game",
+  "name": "Primeros pasos",
+  "description": "Juega tu primera partida.",
+  "iconKey": "first",
+  "category": "Primeros pasos",
+  "unlocked": true,
+  "unlockedAt": "2026-05-07T15:00:00Z"
+}
+```
+
+Si un logro esta bloqueado, el backend devuelve `name: "???"`, `description: "???"` e `iconKey: "lock"` para no revelar como desbloquearlo.
+
+### Eventos WebSocket
+
+| Evento | Canal | Payload |
+|--------|-------|---------|
+| `ACHIEVEMENT_UNLOCKED` | `/user/queue/achievements` | `{ "type": "ACHIEVEMENT_UNLOCKED", "achievement": { ... } }` |
+
+### Frontend
+
+- Toast global no bloqueante al desbloquear un logro.
+- Perfil: seccion `Logros` con contador `desbloqueados/total`, grid de catalogo y fecha si esta desbloqueado.
+- Topbar/avatar: muestra como emblema el logro desbloqueado mas reciente.
  
-## 🕷️ Módulo 7 — SCRAPING
+---
+ 
+## 🕷️ Módulo 8 — SCRAPING
 > Issues: #45, #46, #47, #48, #49, #50, #51, #52
  
 Scrapers en Scrapy que extraen datos reales y los insertan en PostgreSQL como preguntas.
@@ -444,7 +488,7 @@ Moderador revisa → estado: ACTIVE
  
 ---
  
-## 🛡️ Módulo 8 — ADMIN & MODERACIÓN
+## 🛡️ Módulo 9 — ADMIN & MODERACIÓN
 > Issues: #80, #81, #82
  
 Gestión de preguntas reportadas y administración de la plataforma.

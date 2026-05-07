@@ -4,6 +4,7 @@ import { provideRouter } from '@angular/router';
 import { of } from 'rxjs';
 import { TopbarComponent } from './topbar';
 import { AuthService } from '../../../../core/services/auth.service';
+import { AchievementService } from '../../../../core/services/achievement.service';
 import { UserService } from '../../../../core/services/user.service';
 import { StatsService } from '../../../../core/services/stats.service';
 import { PlayerStats } from '../../../../core/models/game.models';
@@ -62,6 +63,23 @@ describe('TopbarComponent', () => {
             mine: () => of(stats),
           },
         },
+        {
+          provide: AchievementService,
+          useValue: {
+            list: () => of([
+              {
+                id: 'achievement-1',
+                key: 'first_game',
+                name: 'Primeros pasos',
+                description: 'Juega tu primera partida.',
+                iconKey: 'first',
+                category: 'Primeros pasos',
+                unlocked: true,
+                unlockedAt: '2026-01-02T00:00:00Z',
+              },
+            ]),
+          },
+        },
       ],
     }).compileComponents();
 
@@ -77,6 +95,7 @@ describe('TopbarComponent', () => {
 
     expect(text).toContain('player');
     expect(text).toContain('325 XP');
+    expect(text).toContain('1');
     expect(img?.getAttribute('src')).toBe('data:image/png;base64,abc');
   });
 

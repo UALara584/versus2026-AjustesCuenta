@@ -106,6 +106,21 @@ erDiagram
     int current_streak
   }
 
+  achievements {
+    uuid id PK
+    string achievement_key UK
+    string name
+    string description
+    string icon_key
+    string category
+  }
+
+  user_achievements {
+    uuid user_id PK,FK
+    uuid achievement_id PK,FK
+    timestamp unlocked_at
+  }
+
   matchmaking_queue {
     uuid id PK
     uuid user_id FK
@@ -150,6 +165,8 @@ erDiagram
   users ||--o{ match_answers : "responde"
   users ||--o{ rankings : "tiene"
   users ||--o{ player_stats : "acumula"
+  users ||--o{ user_achievements : "desbloquea"
+  achievements ||--o{ user_achievements : "aparece en"
   users ||--o{ matchmaking_queue : "espera en"
   users ||--o{ question_reports : "reporta"
   questions ||--o{ question_reports : "es reportada"
@@ -173,6 +190,7 @@ erDiagram
 | `match_players.current_streak`, `best_streak_in_match`, `rounds_played` | Estado de partida singleplayer (Survival/Precision). |
 | `match_answers.is_correct` | Permite filtros y stats sin recalcular desviación. |
 | `matches.owner_user_id` | Identifica al dueño/host (singleplayer = único jugador). |
+| Nuevas tablas `achievements` y `user_achievements` | Catalogo de logros y desbloqueos unicos por usuario. |
 
 ## Índices
 
@@ -182,6 +200,8 @@ erDiagram
 - `matchmaking_queue(mode, entered_at)`.
 - `match_rounds(match_id)`, `match_answers(round_id)`, `match_answers(user_id)`.
 - `refresh_tokens(user_id)`, `refresh_tokens(token_hash)`.
+- `achievements(achievement_key)` UNIQUE, `achievements(category)`.
+- `user_achievements(user_id, achievement_id)` PK compuesta.
 
 Por si no se visualiza bien, también se presentan las imágenes del esquema:
 

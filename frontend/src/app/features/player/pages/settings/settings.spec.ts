@@ -4,6 +4,7 @@ import { provideRouter } from '@angular/router';
 import { of } from 'rxjs';
 import { Settings } from './settings';
 import { AuthService } from '../../../../core/services/auth.service';
+import { AchievementService } from '../../../../core/services/achievement.service';
 import { UserService } from '../../../../core/services/user.service';
 import { StatsService } from '../../../../core/services/stats.service';
 
@@ -61,6 +62,7 @@ describe('Settings', () => {
         },
         { provide: UserService, useValue: userService },
         { provide: StatsService, useValue: { mine: () => of([]) } },
+        { provide: AchievementService, useValue: { list: () => of([]) } },
       ],
     }).compileComponents();
 

@@ -216,6 +216,7 @@ html, body {
 .vs-avatar {
   width: 32px;
   height: 32px;
+  position: relative;
   border-radius: 50%;
   background: linear-gradient(135deg, var(--vs-accent-red), var(--vs-accent-purple));
   display: inline-flex;
@@ -230,6 +231,25 @@ html, body {
 
   &--lg { width: 56px; height: 56px; font-size: 22px; }
   &--xl { width: 88px; height: 88px; font-size: 32px; }
+}
+
+.vs-avatar__achievement {
+  position: absolute;
+  right: -7px;
+  bottom: -7px;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 4px;
+  border-radius: 999px;
+  display: inline-grid;
+  place-items: center;
+  border: 1px solid var(--vs-bg-base);
+  background: var(--vs-accent-gold);
+  color: var(--vs-bg-base);
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0;
 }
 
 // ─── Topbar ───────────────────────────────────────────────────────────────────
