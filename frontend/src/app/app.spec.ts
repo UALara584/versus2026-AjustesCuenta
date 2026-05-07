@@ -22,5 +22,6 @@ describe('App', () => {
     fixture.detectChanges();
     await fixture.whenStable();
     expect(fixture.debugElement.query(By.directive(RouterOutlet))).toBeTruthy();
+
   });
 });

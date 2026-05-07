@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+
 import { signal } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { of } from 'rxjs';
@@ -31,10 +32,12 @@ describe('TopbarComponent', () => {
   ];
 
   beforeEach(async () => {
+
     await TestBed.configureTestingModule({
       imports: [TopbarComponent],
       providers: [
         provideRouter([]),
+
         {
           provide: AuthService,
           useValue: {
@@ -62,11 +65,13 @@ describe('TopbarComponent', () => {
             mine: () => of(stats),
           },
         },
+
       ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(TopbarComponent);
     fixture.detectChanges();
+
     await fixture.whenStable();
     fixture.detectChanges();
   });
@@ -94,5 +99,6 @@ describe('TopbarComponent', () => {
     expect(text).toContain('override');
     expect(text).toContain('999 XP');
     expect(img?.getAttribute('src')).toBe('https://avatar.test/a.svg');
+
   });
 });
