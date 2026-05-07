@@ -24,6 +24,7 @@ ng build
 
 # Backend only (inside backend/)
 ./mvnw spring-boot:run   # http://localhost:8080
+
 ./mvnw test
 ./mvnw package
 ```
@@ -67,6 +68,7 @@ Defined in `docs/bd-scheme.md`. Key tables: `users`, `questions`, `question_opti
 The full API contract (endpoints, request/response shapes, WebSocket events, error format) is in `docs/guia-de-coordinación-técnica.md`. **This is the single source of truth between backend and frontend.** Frontend uses mock data matching the contract shape until the backend endpoint is ready.
 
 Standard error format:
+
 ```json
 { "error": "UNAUTHORIZED", "message": "...", "status": 401 }
 ```

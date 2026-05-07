@@ -7,6 +7,7 @@ import { UserService } from '../../../../core/services/user.service';
 import { Achievement } from '../../../../core/models/achievement.models';
 import { PlayerStats } from '../../../../core/models/game.models';
 
+
 export type NavKey = 'home' | 'play' | 'ranking' | 'profile' | 'settings' | 'admin' | 'users' | 'spiders' | 'reports';
 export type TopbarUser = { name: string; xp: number; avatarUrl?: string | null };
 
@@ -28,6 +29,7 @@ export class TopbarComponent implements OnInit {
 
   private readonly stats = signal<PlayerStats[]>([]);
   private readonly achievements = signal<Achievement[]>([]);
+
 
   items = computed<[NavKey, string][]>(() =>
     this.role() === 'admin'
@@ -118,4 +120,5 @@ export class TopbarComponent implements OnInit {
     const bestStreak = stats.reduce((best, s) => Math.max(best, s.bestStreak), 0);
     return games * 50 + wins * 150 + bestStreak * 25;
   }
+
 }

@@ -37,6 +37,7 @@ erDiagram
     numeric correct_value
     string unit
     numeric tolerance_percent
+    string text_hash UK
   }
 
   question_options {
@@ -132,9 +133,13 @@ erDiagram
     uuid id PK
     uuid question_id FK
     uuid reported_by FK
-    string reason
+    enum reason
+    string comment
     enum status
     timestamp created_at
+    uuid resolved_by FK
+    timestamp resolved_at
+    enum action
   }
 
   spiders {
@@ -192,10 +197,30 @@ erDiagram
 | `matches.owner_user_id` | Identifica al dueño/host (singleplayer = único jugador). |
 | Nuevas tablas `achievements` y `user_achievements` | Catalogo de logros y desbloqueos unicos por usuario. |
 
+
+## Cambios introducidos en issue #100 (Moderación)
+
+| Cambio | Motivo |
+|---|---|
+| `question_reports.reason` cambia de `string` a `enum` | Valores controlados: `WRONG_ANSWER`, `OUTDATED`, `OFFENSIVE`, `OTHER`. |
+| `question_reports.comment TEXT` (nuevo) | Comentario libre opcional del jugador al reportar. |
+| `question_reports.resolved_by UUID FK(users)` (nuevo) | Quién resolvió el reporte. |
+| `question_reports.resolved_at TIMESTAMP` (nuevo) | Cuándo se resolvió. |
+| `question_reports.action enum` (nuevo) | Acción tomada al resolver: `DISMISS`, `EDIT_QUESTION`, `DELETE_QUESTION`. |
+| `questions.status` añade valor `FLAGGED` | Pregunta auto-flaggeada al acumular 5 reportes PENDING. Deja de servirse en partidas. |
+
+
+## Cambios introducidos en issue #97 (Pipeline Scrapy)
+
+| Cambio | Motivo |
+|---|---|
+| `questions.text_hash VARCHAR(64) UNIQUE` | Deduplicación idempotente en el pipeline Scrapy: SHA-256 del texto de la pregunta. Permite ejecutar el mismo spider varias veces sin crear duplicados. |
+
 ## Índices
 
 - `users(email)` UNIQUE, `users(username)` UNIQUE.
 - `questions(status, type, category)` compuesto (filtro frecuente para `/api/questions/random`).
+- `questions(text_hash)` UNIQUE (deduplicación del pipeline Scrapy).
 - `rankings(mode, score DESC)`.
 - `matchmaking_queue(mode, entered_at)`.
 - `match_rounds(match_id)`, `match_answers(round_id)`, `match_answers(user_id)`.
