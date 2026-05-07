@@ -1,4 +1,5 @@
 import { Component, OnInit, computed, inject, signal } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { TopbarComponent } from '../../../../shared/components/layout/topbar/topbar';
 import { AuthService } from '../../../../core/services/auth.service';
 import { UserService } from '../../../../core/services/user.service';
@@ -17,7 +18,7 @@ const MODE_LABEL: Record<GameMode, string> = {
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [TopbarComponent],
+  imports: [RouterLink, TopbarComponent],
   templateUrl: './profile.html',
   styleUrl: './profile.scss',
 })
