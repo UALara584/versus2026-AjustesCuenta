@@ -95,6 +95,9 @@ Gestión del perfil de usuario.
 |--------|------|-------------|
 | `GET` | `/api/users/me` | Perfil del usuario autenticado |
 | `PUT` | `/api/users/me` | Actualizar username o avatar |
+| `PUT` | `/api/users/me/password` | Cambiar contrasena (requiere contrasena actual) |
+| `PUT` | `/api/users/me/avatar` | Seleccionar avatar por URL o subir imagen multipart |
+| `DELETE` | `/api/users/me` | Eliminar cuenta con soft delete y anonimizacion |
 | `GET` | `/api/users/:id` | Perfil público de cualquier usuario |
  
 ### Contrato de perfil
@@ -111,6 +114,55 @@ GET /api/users/me
   "createdAt": "2025-01-01T00:00:00Z"
 }
 ```
+
+### Contratos de ajustes de cuenta
+
+La pantalla `/settings` centraliza cuenta, avatar, notificaciones, audio y zona de peligro.
+
+**Cambiar password:**
+```json
+PUT /api/users/me/password
+{
+  "currentPassword": "actual123",
+  "newPassword": "nueva1234"
+}
+```
+Respuesta: `204 No Content`. La nueva contrasena debe tener minimo 8 caracteres.
+
+**Seleccionar avatar predefinido:**
+```json
+PUT /api/users/me/avatar
+Content-Type: application/json
+{
+  "avatarUrl": "https://api.dicebear.com/..."
+}
+```
+
+**Subir avatar propio:**
+```http
+PUT /api/users/me/avatar
+Content-Type: multipart/form-data
+
+file=<png|jpeg|max 2MB>
+```
+
+El backend devuelve `UserMeResponse` y el frontend actualiza topbar/perfil inmediatamente. Hasta que exista el modulo de almacenamiento, el upload se guarda como `data:image/...;base64` en `users.avatar_url`.
+
+**Eliminar cuenta:**
+```http
+DELETE /api/users/me
+```
+Respuesta: `204 No Content`. En frontend se exige doble confirmacion escribiendo el username exacto. En backend se aplica soft delete con `status=DELETED`, `is_active=false` y anonimizacion de username/email/avatar/password.
+
+### Pantalla `/settings` (frontend)
+
+- Cuenta: username editable; email visible pero dependiente del modulo de email para cambio real.
+- Password: requiere password actual y confirmacion visual en el formulario.
+- Avatar: galeria de avatares predefinidos con confirmacion `Aceptar/Cancelar`; upload PNG/JPEG con crop basico y boton de subida.
+- Notificaciones: preferencias de solicitudes de amistad, invitaciones y logros guardadas en `localStorage`.
+- Audio: controles `Efectos de sonido`, `Musica de fondo`, silenciar todo y feedback reducido guardados en `localStorage`.
+- Zona de peligro: borrar cuenta exige escribir el username.
+- Topbar: muestra username/avatar reales y XP calculado desde `/api/stats/me` mientras no exista campo `xp` dedicado.
  
 ---
  

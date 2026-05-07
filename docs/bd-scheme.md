@@ -9,8 +9,9 @@ erDiagram
     string username UK
     string email UK
     string password_hash
-    string avatar_url
+    text avatar_url
     enum role
+    enum status
     boolean is_active
     timestamp created_at
     timestamp updated_at
@@ -161,6 +162,8 @@ erDiagram
 | Cambio | Motivo |
 |---|---|
 | `users.is_active`, `users.updated_at` | Soft-deactivation de cuentas y auditoría. |
+| `users.status` | Estado funcional de cuenta (`ACTIVE`, `DELETED`) para soft delete explicito. |
+| `users.avatar_url` como TEXT | Permite guardar temporalmente avatares subidos como `data:image/...;base64` hasta tener almacenamiento externo. |
 | `users.email` y `users.username` con UNIQUE | Garantiza unicidad para login y registro. |
 | Nueva tabla `refresh_tokens` | JWT con rotación: hash + expiración + flag de revocado. |
 | `questions.correct_value` (NUMERIC) sustituye a `correct_answer` (string) | Tipado correcto para modo PRECISION. |
