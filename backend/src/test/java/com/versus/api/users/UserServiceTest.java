@@ -205,8 +205,6 @@ class UserServiceTest {
             User user = activeUser();
             stubActiveUser(user);
             MultipartFile file = mock(MultipartFile.class);
-            when(file.getContentType()).thenReturn("image/png");
-            when(file.getSize()).thenReturn(3L);
             MediaAssetResponse avatarResponse = new MediaAssetResponse(
                     "asset-id", MediaKind.IMAGE, "avatar.png", "image/png", 3,
                     MediaVisibility.PUBLIC, "https://storage/avatar.png", Instant.now());
