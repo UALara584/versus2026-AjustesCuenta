@@ -18,6 +18,7 @@
 | Logros | [modules/achievements.md](modules/achievements.md) | ✅ Sprint 3 |
 | Moderación | [modules/moderation.md](modules/moderation.md) | 🚧 Sprint 4 |
 | Scraping | [modules/scraping.md](modules/scraping.md) | 🚧 Sprint 4 |
+| Multimedia y almacenamiento | [modules/media.md](modules/media.md) | ✅ Dependencia #121 |
 
 Leyenda: ✅ implementado · 🚧 entidades definidas, lógica pendiente · ❌ sin implementar
 

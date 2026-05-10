@@ -1,6 +1,8 @@
 package com.versus.api.users;
 
 import com.versus.api.common.exception.ApiException;
+import com.versus.api.media.MediaService;
+import com.versus.api.media.dto.MediaAssetResponse;
 import com.versus.api.users.domain.User;
 import com.versus.api.users.dto.ChangePasswordRequest;
 import com.versus.api.users.dto.UpdateMeRequest;
@@ -11,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.UUID;
 
@@ -20,6 +23,8 @@ public class UserService {
 
     private final UserRepository users;
     private final PasswordEncoder passwordEncoder;
+    private final MediaService mediaService;
+
 
     @Transactional(readOnly = true)
     public UserMeResponse getMe(UUID userId) {
@@ -65,8 +70,20 @@ public class UserService {
         u.setAvatarUrl(avatarUrl);
         users.save(u);
         return toMe(u);
+    }  
+
+    @Transactional
+    public UserMeResponse updateAvatar(UUID userId, MultipartFile file) {
+        User u = users.findById(userId)
+                .orElseThrow(() -> ApiException.notFound("User not found"));
+        MediaAssetResponse avatar = mediaService.uploadAvatar(userId, file);
+        u.setAvatarUrl(avatar.url());
+        users.save(u);
+        return toMe(u);
     }
 
+
+    /** DEAD CODE: Comprobar validaciones para aplicar guards de imágenes
     @Transactional
     public UserMeResponse updateAvatarUpload(UUID userId, byte[] bytes, String contentType) {
         User u = activeUser(userId);
@@ -84,6 +101,7 @@ public class UserService {
         users.save(u);
         return toMe(u);
     }
+    */
 
     @Transactional
     public void deleteMe(UUID userId) {
